@@ -1,7 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include"naglowek.h"
 int main()
 {
-
+los();
 return 0;
 }

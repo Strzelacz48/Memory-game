@@ -1,14 +1,14 @@
 # depslib dependency file v1.0
-1610450884 source:d:\kody c cpp\projekt c gra w memory\memory_game\main.c
-	<stdio.h>
-	<stdlib.h>
-
-1610454639 source:d:\kody c cpp\projekt c gra w memory\memory_game\funkcje.c
+1610626832 source:d:\kody c cpp\projekt c gra w memory\memory_game\main.c
 	"naglowek.h"
 
-1610455104 d:\kody c cpp\projekt c gra w memory\memory_game\naglowek.h
+1610627090 source:d:\kody c cpp\projekt c gra w memory\memory_game\funkcje.c
+	"naglowek.h"
+
+1610626844 d:\kody c cpp\projekt c gra w memory\memory_game\naglowek.h
 	<stdio.h>
 	<stdlib.h>
+	<time.h>
 	<gtk/gtk.h>
 	<stdbool.h>
 

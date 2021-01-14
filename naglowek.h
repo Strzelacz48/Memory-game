@@ -12,5 +12,6 @@ typedef struct elem
     int y;
 } kafelek;
 bool check(kafelek a,kafelek b);
-kafelek plansza[6][6];
+void los();
+//kafelek plansza[6][6];
 #endif // NAGLOWEK_H_INCLUDED
