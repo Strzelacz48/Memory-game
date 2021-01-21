@@ -8,10 +8,11 @@
 typedef struct elem
 {
     int val;
-    int x;
+    int czyo;
     int y;
 }kafelek;
 bool check(kafelek a,kafelek b);
+void wybrany(kafelek *a);
 //int los();
 void mieszanie(kafelek plansza[6][6]);
 #endif // NAGLOWEK_H_INCLUDED

@@ -10,7 +10,10 @@ bool check(kafelek a,kafelek b)
     else
         return false;
 }
-
+void wybrany(kafelek *a)
+{
+    a->czyo=1;
+}
 /*int los() // funkcja do losowania liczb z przedzialu <0,18>
 {
     //int a;
@@ -25,13 +28,13 @@ bool check(kafelek a,kafelek b)
 }*/
 void mieszanie(kafelek plansza[6][6])
 {
-    int tab[18];
+    int tab[18];//tablica pamiętająca czy nie ma za dużo tych samych liczb na planszy
     srand(time(NULL));
     for(int i=0; i<18; i++)
     {
         tab[i]=0;
     }
-    for(int i=0; i<6; i++)
+    for(int i=0; i<6; i++)// pętle resetujące planszę
     {
         for(int j=0; j<6; j++)
         {
@@ -40,23 +43,25 @@ void mieszanie(kafelek plansza[6][6])
             {
                 tab[r]++;
                 plansza[i][j].val=r;
+                plansza[i][j].czyo=0;
             }
-            else
+            else//jeśli liczba była już 2 razy na planszy
             {
-                int k=r;
-                while(tab[k]==2)
+                //int k=r;
+                while(tab[r]==2)//szukanie innej co nie była 2 razy
                 {
-                    if(k==18)
+                    if(r==17)
                     {
-                        k=0;
+                        r=0;
                     }
                     else
                     {
-                        k++;
+                        r++;
                     }
                 }
-                tab[k]++;
-                plansza[i][j].val=k;
+                tab[r]++;
+                plansza[i][j].val=r;
+                plansza[i][j].czyo=0;
             }
             //printf("%d ",r);
         }
