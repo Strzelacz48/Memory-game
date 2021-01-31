@@ -10,7 +10,7 @@ typedef struct elem
 {
     int val;
     int czyo;
-    int y;
+    bool wyb;
 }kafelek;
 typedef struct przycisk
 {

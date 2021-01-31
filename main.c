@@ -2,7 +2,7 @@
 kafelek plansza[6][6];
 GtkWidget *planszagtk;
 //GtkWidget *komorka;
-int x,y,liczby[18];
+int x,y,tab[18];
 int main(int argc,char *argv[])
 {
     srand(time(NULL));
@@ -13,7 +13,7 @@ int main(int argc,char *argv[])
     GtkWidget *window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window),"Gra w Memory");
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-    gtk_container_set_border_width(GTK_CONTAINER(window), 300);
+    gtk_container_set_border_width(GTK_CONTAINER(window), 30);
     g_signal_connect(G_OBJECT(window),"destroy",G_CALLBACK(gtk_main_quit),NULL);
 
     //1 box

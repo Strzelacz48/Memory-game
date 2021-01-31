@@ -1,13 +1,18 @@
 #include"naglowek.h"
 extern kafelek plansza[6][6];
 extern GtkWidget *planszagtk;
-extern int x,y,n,liczby[18];
+extern int x,y,n,tab[18];
 bool have_same_value(kafelek a,kafelek b)
 {
     return a.val==b.val;
 }
 void wybierz(GtkWidget *button)
 {
+    if(plansza[x][y].czyo==1)
+    {
+        g_print("Wybierz zakryty guzik\n");
+        return;
+    }
     GValue top = G_VALUE_INIT;
     GValue left = G_VALUE_INIT;
     g_value_init(&top, G_TYPE_INT);
@@ -17,14 +22,32 @@ void wybierz(GtkWidget *button)
     x = g_value_get_int(&top);
     y = g_value_get_int(&left);
     g_print("%d %d\n",x,y);
-    if(plansza[x][y].czyo==1)
+    bool pom=false;
+    for(int i=0; i<6; i++)
     {
-        g_print("Wybierz zakryty guzik\n");
-        return;
+        for(int j=0; j<6; j++)
+        {
+            if(plansza[i][j].wyb==true)
+            {
+                if(plansza[x][y].val==plansza[i][j].val)
+                {
+
+                }
+                else
+                {
+                    plansza[i][j].wyb=false;
+                    plansza[i][j].czyo=0;
+                    pom=true;
+                }
+            }
+        }
     }
-    else
+//pierwszy guzik
+    if(pom==false)
     {
         plansza[x][y].czyo=1;
+        plansza[x][y].wyb=true;
+        liczby[plansza[x][y].val]--;
     }
     //a->czyo=1;
 }
@@ -46,7 +69,6 @@ void mieszanie()
     //g_print("test");
     //return;
     //tablica pamiętająca czy nie ma za dużo tych samych liczb na planszy
-    int tab[18];
     for(int i=0; i<18; i++)
     {
         tab[i]=0;
@@ -65,7 +87,7 @@ void mieszanie()
             else//jeśli liczba była już 2 razy na planszy
             {
                 //int k=r;
-                    //return ;
+                //return ;
                 while(tab[r]==2)//szukanie innej co nie była 2 razy
                 {
                     if(r==17)
@@ -86,11 +108,12 @@ void mieszanie()
         }
         //printf("\n");
     }
-    for(int i=0;i<6;i++)
+    for(int i=0; i<6; i++)
     {
-        for(int j=0;j<6;j++){
-        g_print(" %d",plansza[i][j].val);
-    }
+        for(int j=0; j<6; j++)
+        {
+            g_print(" %d",plansza[i][j].val);
+        }
         g_print("\n");
     }
 }
@@ -98,20 +121,20 @@ int grawkonsoli()
 {
     kafelek plansza[6][6];
     mieszanie((kafelek*)plansza);
-    int tab[18]= {0};
+    int tab1[18]= {0};
     for(int i=0; i<6; i++)
     {
         for(int j=0; j<6; j++)
         {
             //sprawdzanie czy są pary/*
-            if(tab[plansza[i][j].val]==2)
+            if(tab1[plansza[i][j].val]==2)
             {
                 printf("error");
                 return 0;
             }
             else
             {
-                tab[plansza[i][j].val]++;
+                tab1[plansza[i][j].val]++;
             }//koniec sprawdzania*/
             printf("%d ",plansza[i][j].val);
         }
@@ -119,7 +142,7 @@ int grawkonsoli()
     }//pom ilosć aktualnie wybranych kafelków
     for(int i=0; i<18; i++) //resetowanie tabeli z ilością par
     {
-        tab[i]=0;
+        tab1[i]=0;
     }
     int x,y,x1,y1,pom=0;
     while(true)
@@ -145,7 +168,7 @@ int grawkonsoli()
         int koniec=18;
         for(int i=0; i<18; i++)
         {
-            if(tab[i]==0)
+            if(tab1[i]==0)
             {
                 koniec--;
             }
@@ -215,7 +238,7 @@ int grawkonsoli()
             }
             else
             {
-                tab[plansza[x][y].val]=1;
+                tab1[plansza[x][y].val]=1;
             }
             pom=0;
         }
