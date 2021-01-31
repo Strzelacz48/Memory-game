@@ -20,7 +20,7 @@ typedef struct przycisk
 }guzik;
 bool have_same_value(kafelek a,kafelek b);
 int grawkonsoli();
-void wybrany(kafelek *a);
+void wybierz(GtkWidget *a);
 //int los();
-void mieszanie(kafelek plansza[6][6]);
+void mieszanie();
 #endif // NAGLOWEK_H_INCLUDED

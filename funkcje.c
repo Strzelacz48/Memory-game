@@ -1,13 +1,34 @@
 #include"naglowek.h"
-
+extern kafelek plansza[6][6];
+extern GtkWidget *planszagtk;
+extern int x,y,n,liczby[18];
 bool have_same_value(kafelek a,kafelek b)
 {
     return a.val==b.val;
 }
-void wybrany(kafelek *a)
+void wybierz(GtkWidget *button)
 {
-    a->czyo=1;
+    GValue top = G_VALUE_INIT;
+    GValue left = G_VALUE_INIT;
+    g_value_init(&top, G_TYPE_INT);
+    g_value_init(&left, G_TYPE_INT);
+    gtk_container_child_get_property(GTK_CONTAINER(planszagtk), button, "top-attach", &top);
+    gtk_container_child_get_property(GTK_CONTAINER(planszagtk), button, "left-attach", &left);
+    x = g_value_get_int(&top);
+    y = g_value_get_int(&left);
+    g_print("%d %d\n",x,y);
+    if(plansza[x][y].czyo==1)
+    {
+        g_print("Wybierz zakryty guzik\n");
+        return;
+    }
+    else
+    {
+        plansza[x][y].czyo=1;
+    }
+    //a->czyo=1;
 }
+
 /*int los() // funkcja do losowania liczb z przedzialu <0,18>
 {
     //int a;
@@ -20,10 +41,12 @@ void wybrany(kafelek *a)
     //}
     return r;
 }*/
-void mieszanie(kafelek plansza[6][6])
+void mieszanie()
 {
-    int tab[18];//tablica pamiętająca czy nie ma za dużo tych samych liczb na planszy
-    srand(time(NULL));
+    //g_print("test");
+    //return;
+    //tablica pamiętająca czy nie ma za dużo tych samych liczb na planszy
+    int tab[18];
     for(int i=0; i<18; i++)
     {
         tab[i]=0;
@@ -42,6 +65,7 @@ void mieszanie(kafelek plansza[6][6])
             else//jeśli liczba była już 2 razy na planszy
             {
                 //int k=r;
+                    //return ;
                 while(tab[r]==2)//szukanie innej co nie była 2 razy
                 {
                     if(r==17)
@@ -56,16 +80,24 @@ void mieszanie(kafelek plansza[6][6])
                 tab[r]++;
                 plansza[i][j].val=r;
                 plansza[i][j].czyo=0;
+
             }
             //printf("%d ",r);
         }
         //printf("\n");
     }
+    for(int i=0;i<6;i++)
+    {
+        for(int j=0;j<6;j++){
+        g_print(" %d",plansza[i][j].val);
+    }
+        g_print("\n");
+    }
 }
 int grawkonsoli()
 {
     kafelek plansza[6][6];
-    mieszanie(plansza);
+    mieszanie((kafelek*)plansza);
     int tab[18]= {0};
     for(int i=0; i<6; i++)
     {
