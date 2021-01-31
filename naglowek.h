@@ -3,7 +3,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include <time.h>
-#include<gtk/gtk.h>
+#include <string.h>
+#include <gtk/gtk.h>
 #include<stdbool.h>
 typedef struct elem
 {
@@ -11,7 +12,14 @@ typedef struct elem
     int czyo;
     int y;
 }kafelek;
-bool check(kafelek a,kafelek b);
+typedef struct przycisk
+{
+    int val;
+    int czyo;
+    int posY,posX,lenY,lenX;
+}guzik;
+bool have_same_value(kafelek a,kafelek b);
+int grawkonsoli();
 void wybrany(kafelek *a);
 //int los();
 void mieszanie(kafelek plansza[6][6]);
