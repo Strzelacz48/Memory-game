@@ -1,14 +1,22 @@
 #include"naglowek.h"
 extern kafelek plansza[6][6];
-extern GtkWidget *planszagtk;
+extern GtkWidget *planszagtk,*komorka;
 extern int x,y,n,tab[18];
-bool have_same_value(kafelek a,kafelek b)
+extern bool stangry;
+char* intToString(int n)
 {
-    return a.val==b.val;
+    char str[100000];
+    sprintf(str, "%d", n);
+    return strdup(str);
 }
+
 void wybierz(GtkWidget *button)
 {
-
+    if(stangry==true)
+    {
+        g_print("Gra sie zakonczyla\n");
+        return;
+    }
     GValue top = G_VALUE_INIT;
     GValue left = G_VALUE_INIT;
     g_value_init(&top, G_TYPE_INT);
@@ -31,17 +39,22 @@ void wybierz(GtkWidget *button)
             if(plansza[i][j].wyb==true)
             {
                 if(plansza[x][y].val==plansza[i][j].val)
-                {
+                {//jeśli wybrano 2 takie same guziki
                     plansza[i][j].wyb=false;
                     plansza[x][y].czyo=1;
-                    pom=true;
+                    pom=true;//debugingg
                     g_print("Są takie same\n");
+                    tab[plansza[x][y].val]=0;
+                    //zmiana etykiet guzikow
+                    gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[i][j].val));
+                    komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),y,x);
+                    gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[x][y].val));
                 }
                 else
                 {
                     plansza[i][j].wyb=false;
                     plansza[i][j].czyo=0;
-                    pom=true;
+                    pom=true;//debugging
                     g_print("Nie są takie same\n");
                 }
             }
@@ -52,25 +65,31 @@ void wybierz(GtkWidget *button)
     {
         plansza[x][y].czyo=1;
         plansza[x][y].wyb=true;
+        komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),y,x);
         //tab[plansza[x][y].val];
+    }
+    else
+    {
+        int pom2=18;
+        for(int i=0;i<18;i++)
+        {
+            g_print("%d ",tab[i]);
+            if(tab[i]==0)
+                {pom2--;}
+        }
+        if(pom2==0)
+            {
+                g_print("\nGra skończona wygrałeś\n");
+                stangry=true;
+            }
     }
     //a->czyo=1;
 }
 
-/*int los() // funkcja do losowania liczb z przedzialu <0,18>
-{
-    //int a;
-    //scanf("%d",&a);
-    srand(time(NULL));
-    //for(int i=0; i<a; i++)
-    //{
-    int r = rand()%18;      // Returns a pseudo-random integer between 0 and RAND_MAX.
-    //printf("%d" " ",r);
-    //}
-    return r;
-}*/
+
 void mieszanie()
 {
+    stangry=false;
     //g_print("test");
     //return;
     //tablica pamiętająca czy nie ma za dużo tych samych liczb na planszy
@@ -107,12 +126,14 @@ void mieszanie()
                 tab[r]++;
                 plansza[i][j].val=r;
                 plansza[i][j].czyo=0;
-
             }
+            //czyszczenie guzikow
+            komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),i,j);
+            gtk_button_set_label(GTK_BUTTON(komorka),"");
             //printf("%d ",r);
         }
         //printf("\n");
-    }
+    }//wskazowki jak wyglada plansza
     for(int i=0; i<6; i++)
     {
         for(int j=0; j<6; j++)
@@ -272,3 +293,19 @@ int grawkonsoli()
         }
     }
 }
+/*int los() // funkcja do losowania liczb z przedzialu <0,18>
+{
+    //int a;
+    //scanf("%d",&a);
+    srand(time(NULL));
+    //for(int i=0; i<a; i++)
+    //{
+    int r = rand()%18;      // Returns a pseudo-random integer between 0 and RAND_MAX.
+    //printf("%d" " ",r);
+    //}
+    return r;
+}*/
+/*bool have_same_value(kafelek a,kafelek b)
+{
+    return a.val==b.val;
+}*/

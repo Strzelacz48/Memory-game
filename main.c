@@ -1,12 +1,13 @@
 #include"naglowek.h"
 kafelek plansza[6][6];
 GtkWidget *planszagtk;
-//GtkWidget *komorka;
+GtkWidget *komorka;
+bool stangry;
 int x,y,tab[18];
 int main(int argc,char *argv[])
 {
     srand(time(NULL));
-    mieszanie();
+
     //int a;
     // gtk grid sie przyda
     gtk_init (&argc, &argv);
@@ -15,7 +16,7 @@ int main(int argc,char *argv[])
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     gtk_container_set_border_width(GTK_CONTAINER(window), 30);
     g_signal_connect(G_OBJECT(window),"destroy",G_CALLBACK(gtk_main_quit),NULL);
-
+    gtk_window_set_resizable(GTK_WINDOW(window),false);
     //1 box
     GtkWidget *box1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(window), box1);
@@ -41,6 +42,7 @@ int main(int argc,char *argv[])
             gtk_grid_attach(GTK_GRID(planszagtk),button,j,i,1,1);
         }
     }
+    mieszanie();
     gtk_widget_show_all(window);
     gtk_main ();
     return 0;
