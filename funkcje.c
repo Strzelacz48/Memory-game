@@ -8,11 +8,7 @@ bool have_same_value(kafelek a,kafelek b)
 }
 void wybierz(GtkWidget *button)
 {
-    if(plansza[x][y].czyo==1)
-    {
-        g_print("Wybierz zakryty guzik\n");
-        return;
-    }
+
     GValue top = G_VALUE_INIT;
     GValue left = G_VALUE_INIT;
     g_value_init(&top, G_TYPE_INT);
@@ -22,6 +18,11 @@ void wybierz(GtkWidget *button)
     x = g_value_get_int(&top);
     y = g_value_get_int(&left);
     g_print("%d %d\n",x,y);
+    if(plansza[x][y].czyo==1)
+    {
+        g_print("Wybierz zakryty guzik\n");
+        return;
+    }
     bool pom=false;
     for(int i=0; i<6; i++)
     {
@@ -31,13 +32,17 @@ void wybierz(GtkWidget *button)
             {
                 if(plansza[x][y].val==plansza[i][j].val)
                 {
-
+                    plansza[i][j].wyb=false;
+                    plansza[x][y].czyo=1;
+                    pom=true;
+                    g_print("Są takie same\n");
                 }
                 else
                 {
                     plansza[i][j].wyb=false;
                     plansza[i][j].czyo=0;
                     pom=true;
+                    g_print("Nie są takie same\n");
                 }
             }
         }
@@ -47,7 +52,7 @@ void wybierz(GtkWidget *button)
     {
         plansza[x][y].czyo=1;
         plansza[x][y].wyb=true;
-        liczby[plansza[x][y].val]--;
+        //tab[plansza[x][y].val];
     }
     //a->czyo=1;
 }
