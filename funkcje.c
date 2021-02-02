@@ -1,7 +1,7 @@
 #include"naglowek.h"
 extern kafelek plansza[6][6];
 extern GtkWidget *planszagtk,*komorka;
-extern int x,y,n,tab[18];
+extern int x,y,a,tab[18],liczbar;
 extern bool stangry;
 char* intToString(int n)
 {
@@ -9,12 +9,30 @@ char* intToString(int n)
     sprintf(str, "%d", n);
     return strdup(str);
 }
-
+void test()
+{
+    //g_timeout_add();
+}
 void wybierz(GtkWidget *button)
 {
+    if(a==2)
+    {
+        a=0;
+        for(int i=0;i<6;i++)
+        {
+            for(int j=0;j<6;j++)
+            {
+                if(plansza[i][j].czyo==0)
+                {
+                    komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),j,i);
+                    gtk_button_set_label(GTK_BUTTON(komorka),"");
+                }
+            }
+        }
+    }
     if(stangry==true)
     {
-        g_print("Gra sie zakonczyla\n");
+        g_print("\nGra skończona wygrałeś w %d ruchów\n",liczbar);
         return;
     }
     GValue top = G_VALUE_INIT;
@@ -25,7 +43,7 @@ void wybierz(GtkWidget *button)
     gtk_container_child_get_property(GTK_CONTAINER(planszagtk), button, "left-attach", &left);
     x = g_value_get_int(&top);
     y = g_value_get_int(&left);
-    g_print("%d %d\n",x,y);
+    //g_print("%d %d\n",x,y);
     if(plansza[x][y].czyo==1)
     {
         g_print("Wybierz zakryty guzik\n");
@@ -49,6 +67,9 @@ void wybierz(GtkWidget *button)
                     gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[i][j].val));
                     komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),y,x);
                     gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[x][y].val));
+                    a++;
+                    liczbar++;
+                    break;
                 }
                 else
                 {
@@ -56,6 +77,14 @@ void wybierz(GtkWidget *button)
                     plansza[i][j].czyo=0;
                     pom=true;//debugging
                     g_print("Nie są takie same\n");
+                    a++;
+                    komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),y,x);
+                    gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[x][y].val));/*
+                    gtk_button_set_label(GTK_BUTTON(komorka),"");
+                    komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),j,i);
+                    gtk_button_set_label(GTK_BUTTON(komorka),"");*/
+                    liczbar++;
+                    break;
                 }
             }
         }
@@ -66,6 +95,8 @@ void wybierz(GtkWidget *button)
         plansza[x][y].czyo=1;
         plansza[x][y].wyb=true;
         komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),y,x);
+        gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[x][y].val));
+        a++;
         //tab[plansza[x][y].val];
     }
     else
@@ -73,22 +104,24 @@ void wybierz(GtkWidget *button)
         int pom2=18;
         for(int i=0;i<18;i++)
         {
-            g_print("%d ",tab[i]);
+            //debugging
+            //g_print("%d ",tab[i]);
             if(tab[i]==0)
                 {pom2--;}
         }
         if(pom2==0)
             {
-                g_print("\nGra skończona wygrałeś\n");
+                g_print("\nGra skończona wygrałeś w %d ruchów\n",liczbar);
                 stangry=true;
             }
     }
     //a->czyo=1;
 }
 
-
 void mieszanie()
 {
+    a=0;
+    liczbar=0;
     stangry=false;
     //g_print("test");
     //return;
@@ -143,6 +176,7 @@ void mieszanie()
         g_print("\n");
     }
 }
+//stara funkcja do gry w konsoli
 int grawkonsoli()
 {
     kafelek plansza[6][6];
@@ -293,6 +327,7 @@ int grawkonsoli()
         }
     }
 }
+//funkcje zapasowe/pozostalosci po tworzeniu głownych funkcji
 /*int los() // funkcja do losowania liczb z przedzialu <0,18>
 {
     //int a;

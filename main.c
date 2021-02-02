@@ -3,7 +3,7 @@ kafelek plansza[6][6];
 GtkWidget *planszagtk;
 GtkWidget *komorka;
 bool stangry;
-int x,y,tab[18];
+int x,y,a,tab[18],liczbar;
 int main(int argc,char *argv[])
 {
     srand(time(NULL));

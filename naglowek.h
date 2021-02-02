@@ -6,6 +6,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include<stdbool.h>
+#include<unistd.h>
 typedef struct elem
 {
     int val;
@@ -21,6 +22,7 @@ typedef struct przycisk
 bool have_same_value(kafelek a,kafelek b);
 int grawkonsoli();
 void wybierz(GtkWidget *a);
+void test();
 //int los();
 void mieszanie();
 #endif // NAGLOWEK_H_INCLUDED
