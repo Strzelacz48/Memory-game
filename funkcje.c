@@ -175,6 +175,8 @@ void wybierz(GtkWidget *button)
 //funkcja do wybierania ustawienia planszy
 void mieszanie()
 {
+    plansza[x][y].wyb=false;
+    plansza[x][y].czyo=0;
     wyjscie(4,0,0);
     a=0;
     liczbar=0;
