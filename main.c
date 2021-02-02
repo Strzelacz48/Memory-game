@@ -2,13 +2,13 @@
 kafelek plansza[6][6];
 GtkWidget *planszagtk;
 GtkWidget *komorka;
+GtkWidget *notatki;
 bool stangry;
 int x,y,a,tab[18],liczbar;
 int main(int argc,char *argv[])
 {
     srand(time(NULL));
 
-    //int a;
     // gtk grid sie przyda
     gtk_init (&argc, &argv);
     GtkWidget *window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -24,7 +24,7 @@ int main(int argc,char *argv[])
     // guzik mieszania
     GtkWidget *button=gtk_button_new_with_label("Mieszaj");
     g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(mieszanie),NULL);
-    gtk_container_add(GTK_CONTAINER(box1), button);
+    gtk_box_pack_start(GTK_BOX(box1), button,FALSE,FALSE,15);
 
     // plansza do gry
     planszagtk = gtk_grid_new();
@@ -42,6 +42,9 @@ int main(int argc,char *argv[])
             gtk_grid_attach(GTK_GRID(planszagtk),button,j,i,1,1);
         }
     }
+    //guzik do wysyłania wiadomości
+    notatki=gtk_button_new_with_label("Gra się rozpoczęła wybierz parę guzików");
+    gtk_container_add(GTK_CONTAINER(box1),notatki);
     mieszanie();
     gtk_widget_show_all(window);
     gtk_main ();

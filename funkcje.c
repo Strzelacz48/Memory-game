@@ -1,6 +1,6 @@
 #include"naglowek.h"
 extern kafelek plansza[6][6];
-extern GtkWidget *planszagtk,*komorka;
+extern GtkWidget *planszagtk,*komorka,*notatki;
 extern int x,y,a,tab[18],liczbar;
 extern bool stangry;
 char* intToString(int n)
@@ -9,12 +9,66 @@ char* intToString(int n)
     sprintf(str, "%d", n);
     return strdup(str);
 }
+char* stringmake(char *A,int B, char *C,int D)
+{
+    char str[100000];
+    if(D!=-1)
+    {
+        printf(str, "%s%d%s%d",D,C,B,A);
+        return strdup(str);
+    }
+    else
+    {
+        sprintf(str, "%s%d%s",A,B,C);
+        return strdup(str);
+    }
+}
 void test()
 {
     //g_timeout_add();
 }
+//funkcja do pisania komunikatow
+void wyjscie(int tryb,int liczba1,int liczba2)
+{
+    if(tryb==0)
+    {
+        gtk_button_set_label(GTK_BUTTON(notatki),"");
+    }
+    else if(tryb==1)//liczba1 i liczba2 sątakie same
+    {
+        gchar *tryb1="Są takie same";
+        gtk_button_set_label(GTK_BUTTON(notatki),tryb1);
+    }
+    else if(tryb==2)//liczba1 i liczba2 są inne
+    {
+        gchar *tryb2="Nie są takie same";
+        gtk_button_set_label(GTK_BUTTON(notatki),tryb2);
+    }
+    else if(tryb==3)//gra się skończyła
+    {
+        gchar *tryb3="Gra skończona wygrałeś w ",*tryb3p=" ruchach";
+        gtk_button_set_label(GTK_BUTTON(notatki),stringmake(tryb3,liczba1,tryb3p,-1));
+    }
+    else if(tryb==4)//gra została zresetowana
+    {
+        gchar *tryb4="Gra się rozpoczęła wybierz parę guzików";
+        gtk_button_set_label(GTK_BUTTON(notatki),tryb4);
+    }
+    else if(tryb==5)
+    {
+        gchar *tryb5="Wybierz zakryty guzik";
+        gtk_button_set_label(GTK_BUTTON(notatki),tryb5);
+    }
+}
+//główna funkcja do guzików
 void wybierz(GtkWidget *button)
 {
+    if(stangry==true)
+    {
+        wyjscie(3,liczbar,-1);
+        //g_print("\nGra skończona wygrałeś w %d ruchów\n",liczbar);
+        return;
+    }
     if(a==2)
     {
         a=0;
@@ -30,11 +84,7 @@ void wybierz(GtkWidget *button)
             }
         }
     }
-    if(stangry==true)
-    {
-        g_print("\nGra skończona wygrałeś w %d ruchów\n",liczbar);
-        return;
-    }
+
     GValue top = G_VALUE_INIT;
     GValue left = G_VALUE_INIT;
     g_value_init(&top, G_TYPE_INT);
@@ -46,7 +96,8 @@ void wybierz(GtkWidget *button)
     //g_print("%d %d\n",x,y);
     if(plansza[x][y].czyo==1)
     {
-        g_print("Wybierz zakryty guzik\n");
+        wyjscie(5,0,0);
+        //g_print("Wybierz zakryty guzik\n");
         return;
     }
     bool pom=false;
@@ -61,7 +112,8 @@ void wybierz(GtkWidget *button)
                     plansza[i][j].wyb=false;
                     plansza[x][y].czyo=1;
                     pom=true;//debugingg
-                    g_print("Są takie same\n");
+                    wyjscie(1,plansza[x][y].val,plansza[x][y].val);
+                    //g_print("Są takie same\n");
                     tab[plansza[x][y].val]=0;
                     //zmiana etykiet guzikow
                     gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[i][j].val));
@@ -76,7 +128,8 @@ void wybierz(GtkWidget *button)
                     plansza[i][j].wyb=false;
                     plansza[i][j].czyo=0;
                     pom=true;//debugging
-                    g_print("Nie są takie same\n");
+                    wyjscie(2,plansza[x][y].val,plansza[i][j].val);
+                    //g_print("Nie są takie same\n");
                     a++;
                     komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),y,x);
                     gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[x][y].val));/*
@@ -89,13 +142,14 @@ void wybierz(GtkWidget *button)
             }
         }
     }
-//pierwszy guzik
+//pierwszy wybrany guzik
     if(pom==false)
     {
         plansza[x][y].czyo=1;
         plansza[x][y].wyb=true;
         komorka=gtk_grid_get_child_at (GTK_GRID(planszagtk),y,x);
         gtk_button_set_label(GTK_BUTTON(komorka),intToString(plansza[x][y].val));
+        wyjscie(0,0,0);
         a++;
         //tab[plansza[x][y].val];
     }
@@ -111,20 +165,20 @@ void wybierz(GtkWidget *button)
         }
         if(pom2==0)
             {
-                g_print("\nGra skończona wygrałeś w %d ruchów\n",liczbar);
+                wyjscie(3,liczbar,liczbar);
+                //g_print("\nGra skończona wygrałeś w %d ruchów\n",liczbar);
                 stangry=true;
             }
     }
-    //a->czyo=1;
 }
 
+//funkcja do wybierania ustawienia planszy
 void mieszanie()
 {
+    wyjscie(4,0,0);
     a=0;
     liczbar=0;
     stangry=false;
-    //g_print("test");
-    //return;
     //tablica pamiętająca czy nie ma za dużo tych samych liczb na planszy
     for(int i=0; i<18; i++)
     {
@@ -166,15 +220,15 @@ void mieszanie()
             //printf("%d ",r);
         }
         //printf("\n");
-    }//wskazowki jak wyglada plansza
-    for(int i=0; i<6; i++)
+    }//wskazowki jak wyglada plansza przydatne przy sprawdzaniu
+    /*for(int i=0; i<6; i++)
     {
         for(int j=0; j<6; j++)
         {
             g_print(" %d",plansza[i][j].val);
         }
         g_print("\n");
-    }
+    }*/
 }
 //stara funkcja do gry w konsoli
 int grawkonsoli()
