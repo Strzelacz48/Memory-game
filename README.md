@@ -42,4 +42,5 @@ Make
 ## Użytkowanie
 Użytkownik może korzystać z matrycy guzików reprezentujących pole gry, a także z guzika "Mieszaj" który resetuje stan rozgrywki i losuje nowy układ planszy. Dolny guzik służy do wysyłania użytkownikowi wiadomości i nie jest interaktywny.
 Kiedy użytkownik wybierze dwa guziki i nie są one takie same pozostaną one widoczne do czasu wybrania nowego guzika.
+
 ![](https://i.imgur.com/fmALOWF.png)
